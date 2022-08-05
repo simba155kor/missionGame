@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 public interface MemberService {
 
-    SignupMemberRes signup(SignupMemberReq signupMemberReq);
+    SignupMemberRes signup(SignupMemberReq signupMemberReq) throws CustomException;
     LoginMemberRes login(LoginMemberReq loginMemberReq) throws CustomException;
 
 }

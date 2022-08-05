@@ -19,17 +19,24 @@ public class MemberServiceImpl implements MemberService{
     @Autowired
     MemberRepository memberRepository;
 
-    public SignupMemberRes signup(SignupMemberReq signupMemberReq){
-        Member member = memberRepository.save(new Member(signupMemberReq));
+    public SignupMemberRes signup(SignupMemberReq signupMemberReq) throws CustomException{
+        Optional<Member> member = memberRepository.findById(signupMemberReq.getId());
 
-        return new SignupMemberRes(member);
+        if(member.isPresent()) throw new CustomException("이미 가입 된 놈.");
+
+        return new SignupMemberRes(memberRepository.save(new Member(signupMemberReq)));
     }
 
 
     public LoginMemberRes login(LoginMemberReq loginMemberReq) throws CustomException{
         Optional<Member> member = memberRepository.findById(loginMemberReq.getId());
 
-        return new LoginMemberRes(member.orElseThrow(() -> new CustomException("가입 안된 놈.")));
+        if(!member.isPresent()) throw new CustomException("가입 안 된 놈.");
+
+        Member memberObj = member.get();
+
+        if(memberObj.getPwd().equals(loginMemberReq.getPwd())) return new LoginMemberRes(memberObj);
+        else throw new CustomException("비밀번호 불일치.");
     }
 
 }

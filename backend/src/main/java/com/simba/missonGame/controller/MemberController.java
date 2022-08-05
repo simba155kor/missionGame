@@ -21,7 +21,7 @@ public class MemberController {
     MemberService memberService;
 
     @PostMapping("/signup")
-    ResponseEntity<SignupMemberRes> signup(@RequestBody SignupMemberReq signupMemberReq){
+    ResponseEntity<SignupMemberRes> signup(@RequestBody SignupMemberReq signupMemberReq) throws CustomException{
         SignupMemberRes signupMemberRes = memberService.signup(signupMemberReq);
         return ResponseEntity.ok(signupMemberRes);
     }
