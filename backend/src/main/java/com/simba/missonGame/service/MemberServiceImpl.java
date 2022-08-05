@@ -29,6 +29,7 @@ public class MemberServiceImpl implements MemberService{
 
 
     public LoginMemberRes login(LoginMemberReq loginMemberReq) throws CustomException{
+        System.out.println(loginMemberReq.toString());
         Optional<Member> member = memberRepository.findById(loginMemberReq.getId());
 
         if(!member.isPresent()) throw new CustomException("가입 안 된 놈.");
