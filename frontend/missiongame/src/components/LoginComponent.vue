@@ -22,6 +22,12 @@
     <br />
     <button class="btn btn-primary" @click="login()">로그인</button>
     <button class="btn btn-success" style="margin-left: 3px">회원가입</button>
+    <button class="btn btn-secondary" @click="oauthlogin()">
+      <a
+        href="https://kauth.kakao.com/oauth/authorize?client_id=e95cf558fa89b9adf46a58d47cfc4df7&redirect_uri=http://localhost:8080/oauthloginpage&response_type=code"
+        >카카오 로그인</a
+      >
+    </button>
   </div>
 </template>
 
@@ -57,6 +63,15 @@ export default {
         } else {
           alert("로그인 실패.");
         }
+      });
+    },
+    oauthlogin() {
+      // let url = "https://kauth.kakao.com/oauth/authorize?client_id=ecde35cd36b20c027a0aa72422bdc288&redirect_uri=http://localhost:8080/choice&response_type=code";
+
+      //   UriComponents uri = UriComponentsBuilder.fromHttpUrl(url).queryParam("client_id", "ecde35cd36b20c027a0aa72422bdc288")
+      //           .queryParam("redirect_uri","http://localhost:8080/choice").queryParam("response_type", "code").build(false);
+      http.get(`/member/oauthlogin`).then(({ data }) => {
+        console.log(data);
       });
     },
   },

@@ -4,10 +4,11 @@ import axios from "axios";
 export default axios.create({
   baseURL: "http://localhost:8999/",
   headers: {
-    "Content-type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
-    "Access-Control-Max-Age": 2592000 // 30 days
+//    "ggg":"ggg"
+    // "Content-type": "application/json",
+    // "Access-Control-Allow-Origin": "*",
+    // "Access-Control-Allow-Headers": "*",
+    // "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+    // "Access-Control-Max-Age": 2592000 // 30 days
   },
 });

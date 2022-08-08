@@ -2,7 +2,8 @@
   <div class="mainComponent">
     <p></p>
     <h1>
-      <b>{{ userId }} {{ msg }}</b>
+      <img :src="getUserImage" />
+      <b>{{ getUserId }} {{ msg }}</b>
     </h1>
     <img alt="자네 지금 뭐하나?" src="../assets/main1.jpg" />
     <p></p>
@@ -11,11 +12,16 @@
     <p><b>자기의 임무를 들키지 마세요.</b></p>
     <h3></h3>
     <button class="btn btn-primary" @click="goPick()">시작하기</button>
+    <button v-if="getLoginState" class="btn btn-danger" @click="logout()">
+      로그아웃
+    </button>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
+import http from "../util/http-connect";
 
 export default {
   name: "MainComponent",
@@ -23,20 +29,42 @@ export default {
     msg: String,
   },
   computed: {
-    ...mapGetters(["getLoginState", "getUserId"]),
+    ...mapGetters(["getLoginState", "getUserId", "getUserImage"]),
   },
   created() {
-    console.log(this.getUserId);
-    this.userId = this.getUserId;
+    if (localStorage.getItem("jwtFake") !== null) {
+      this.getKakaoUserInfo(localStorage.getItem("jwtFake"));
+    }
   },
   data() {
-    return {
-      userId: "hhh",
-    };
+    return {};
   },
   methods: {
+    ...mapMutations(["SET_LOGIN_STATE", "SET_LOGOUT_STATE"]),
     goPick() {
       this.$router.push("/choice");
+    },
+    getKakaoUserInfo(jwtFakeToken) {
+      let params = { jwtFakeToken: jwtFakeToken };
+      http
+        .get(`/kakaoAPI/userinfo`, { params: params })
+        .then(({ data }) => {
+          console.log(data);
+          this.SET_LOGIN_STATE({
+            userId: data.nickname,
+            userImage: data.profile_image,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("error..");
+        });
+    },
+    logout() {
+      localStorage.removeItem("jwtFake");
+      this.SET_LOGOUT_STATE();
+      alert("로그아웃.");
+      this.$router.go();
     },
   },
 };
