@@ -31,4 +31,6 @@
    - access token이 만료되면 refresh token으로 다시 얻어야 하는데 이러한 로직 없음.
    - https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#refresh-token 
 
+   - 백엔드 서버가 내려가도 로컬 스토리지에 jwtFake 토큰이 남아있음.
+       -> 유효기간을 설정해야하나? 어떻게 
 --------------------------------
