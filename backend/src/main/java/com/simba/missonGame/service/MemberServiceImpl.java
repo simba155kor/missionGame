@@ -40,4 +40,5 @@ public class MemberServiceImpl implements MemberService{
         else throw new CustomException("비밀번호 불일치.");
     }
 
+
 }
