@@ -16,11 +16,18 @@
 
  - 로그아웃 시에는 로컬 스토리지에 키 jwtFake 삭제함. vuex 로그아웃 상태로 만듬. 
  
+ - 로그인되면 메인 화면에 프로필 이미지와 닉네임이 나옴. 메인 화면 갈때마다 로컬 스토리지 jwtFake 키 값으로 스프링에 요청 보냄.
+ - 요청 받으면 jwtFake로 DB에 저장되있는 accessToken으로 바꾸고 이 accessToken 이용해서 스프링에서 카카오에 유저 정보 요청하고 응답받아서 다시 프론트로 주는 것. 
+ 
  개선점
    - 프론트에서 인가코드 요청하는 URL로 바로 요청함. (백엔드로 로그인 요청 후 다시 프론트로 인가코드 요청하는 주소로 리다이렉트 하고 싶음.)
    - 로그인 성공하면 홈으로 갈때 스프링에서 리다이렉트하라고 요청해서 프론트에서 바뀌도록 하고 싶음.
       -> 둘다 스프링에서 리다이렉트 하려면 CORS 문제 생겨서 그럼. 이거 해결해야 가능.
       -> Spring Security 문제인지, CORS 설정 문제인지..
       
+   - jwtFake 토큰 jwt 토큰으로 바꿀 것
+
+   - access token이 만료되면 refresh token으로 다시 얻어야 하는데 이러한 로직 없음.
+   - https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#refresh-token 
 
 --------------------------------
