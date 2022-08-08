@@ -35,9 +35,11 @@ public class AuthController {
     @Autowired
     JsonService jsonService;
 
-    //jwtFakeToken을 줌.
+    //인가 코드를 받아서 access token을 요청함.
+    //access token 요청하고 이를 이용해 회원 정보를 요청함.
+    //이미 가입된 회원인지, 새로운 회원인지 확인 후 jwtFakeToken을 반환함.
     @GetMapping("/code")
-    public ResponseEntity<String> getAccessTokenUseAuthorizationCode(@RequestParam(value = "auth_code") String authorizationCode, HttpServletResponse res) throws IOException, ParseException, CustomException {
+    public ResponseEntity<String> getAccessTokenUseAuthorizationCode(@RequestParam(value = "auth_code") String authorizationCode) throws ParseException, CustomException {
         System.out.println("Auth code : " + authorizationCode);
 
         //인가 코드 넘겨 받았으니,
