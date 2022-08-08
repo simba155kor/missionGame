@@ -29,10 +29,13 @@ public class KakaoAPIService {
     @Autowired
     JsonService jsonService;
 
+    //DB에 없을 시 새로 가입시킴.
+    //닉네임, 프로필 이미지, 엑세스토큰, 리프레시토큰, jwtFake토큰, 카카오아이디 저장함.
     public Kakaomember createKakaomember(CreateKakaomemReq createKakaomemReq){
         return kakaomemberRepository.save(new Kakaomember(createKakaomemReq));
     }
 
+    //jwtFakeToken으로 DB에 저장된 access_token 바꿔줌.
     public String convertJwtFakeTokenToAccessToken(String jwtFakeToken){
         Optional<Kakaomember> kakaomember = kakaomemberRepository.findByJwtFakeToken(jwtFakeToken);
 
@@ -45,20 +48,23 @@ public class KakaoAPIService {
 //        return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).get().getAccessToken().orel
     }
 
+    //카카오 ID로 DB에 조회해서 있는지 확인
     public Kakaomember findKakaomemberByKakaoId(String kakaoId) throws CustomException {
         //return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).orElseThrow(() -> new CustomException("멤버 조회중 오류."));
         return kakaomemberRepository.findByKakaoId(kakaoId).orElse(null);
     }
 
-    public Kakaomember findKakaomemberByJwtFakeToken(String jwtFakeToken) throws CustomException {
-        //return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).orElseThrow(() -> new CustomException("멤버 조회중 오류."));
-        return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).orElse(null);
-    }
+//    public Kakaomember findKakaomemberByJwtFakeToken(String jwtFakeToken) throws CustomException {
+//        //return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).orElseThrow(() -> new CustomException("멤버 조회중 오류."));
+//        return kakaomemberRepository.findByJwtFakeToken(jwtFakeToken).orElse(null);
+//    }
 
     public String createJwtFake(String kakaoId, String nickname){
         return kakaoId + nickname;
     }
 
+    //RestTemplate으로 카카오 회원 정보 요청 API 사용.
+    //DB에 있는 accessToken 사용함.
     public Map<String, String> getUserInfo(String accessToken) throws ParseException {
 
         //인가 코드 넘겨 받았으니,

@@ -16,6 +16,8 @@ public class KakaoAPIController {
     @Autowired
     KakaoAPIService kakaoAPIService;
 
+    //카카오 유저정보 요청하기 위한 요청
+    //jwtFakeToken 받아서 accessToken으로 바꾸고 이걸로 회원 정보 요청함.
     @GetMapping("/userinfo")
     ResponseEntity<Map<String, String>> getUserInfo(@RequestParam(value = "jwtFakeToken") String jwtFakeToken) throws ParseException {
         String accessToken = kakaoAPIService.convertJwtFakeTokenToAccessToken(jwtFakeToken);
