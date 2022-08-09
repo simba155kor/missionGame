@@ -1,6 +1,7 @@
 <template>
   <div class="board">
     <h1>This is an board page</h1>
+    <BoardComponent></BoardComponent>
   </div>
 </template>
 
@@ -9,31 +10,25 @@
 .board {
   height: 1200px;
 }
+
+td,
+th {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+body {
+  padding: 1rem;
+}
+
+.boardTable {
+}
 </style>
 
 <script>
-import { mapGetters } from "vuex";
-import http from "../util/http-connect";
+import BoardComponent from "../components/BoardComponent.vue";
 
 export default {
   name: "Board",
-  components: {},
-  created() {
-    if (this.getLoginState === false) {
-      alert("로그인해.");
-      this.$router.push("/login");
-    }
-    http
-      .get(`/board/allboard`)
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  computed: {
-    ...mapGetters(["getLoginState", "getUserId"]),
-  },
+  components: { BoardComponent },
 };
 </script>
