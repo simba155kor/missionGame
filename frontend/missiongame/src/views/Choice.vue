@@ -1,6 +1,7 @@
 <template>
   <div class="choice">
     <h1>This is an choice page</h1>
+    <ChoiceComponent></ChoiceComponent>
   </div>
 </template>
 
@@ -13,10 +14,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ChoiceComponent from "../components/ChoiceComponent.vue";
 
 export default {
   name: "Choice",
-  components: {},
+  components: { ChoiceComponent },
   created() {
     if (this.getLoginState === false) {
       alert("로그인해.");
