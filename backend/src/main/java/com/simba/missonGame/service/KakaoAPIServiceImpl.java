@@ -186,6 +186,11 @@ public class KakaoAPIServiceImpl implements KakaoAPIService{
         resultMap.put("nickname", nickname);
         resultMap.put("profile_image", profile_image);
 
+        //멤버의 DB 번호 조회
+        Kakaomember kakaomember = kakaomemberRepository.findByKakaoId(kakaoId).get();
+        resultMap.put("memberNo", kakaomember.getId().toString());
+
+
         return resultMap;
     }
 

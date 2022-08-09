@@ -52,6 +52,7 @@ public class BoardServiceImpl implements BoardService{
             Map<String, String> tempMap = new HashMap<>();
             tempMap.put("nickname", kakaomember.getNickname());
             tempMap.put("profileImage", kakaomember.getProfileImage());
+            tempMap.put("memberNo", kakaomember.getId().toString());
             userList.add(tempMap);
         }
         return userList;
