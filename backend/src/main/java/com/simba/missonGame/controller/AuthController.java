@@ -42,66 +42,29 @@ public class AuthController {
     public ResponseEntity<String> getAccessTokenUseAuthorizationCode(@RequestParam(value = "auth_code") String authorizationCode) throws ParseException, CustomException {
         System.out.println("Auth code : " + authorizationCode);
 
-        //인가 코드 넘겨 받았으니,
-        RestTemplate restTemplate = new RestTemplate();
+        //인가 코드로 accessTokenRes 받기
+        JSONObject accessTokenRes = kakaoAPIService.convertAuthorizationCodeToAccessToken(authorizationCode);
 
-        // 3. header 설정을 위해 HttpHeader 클래스를 생성한 후 HttpEntity 객체에 넣어줍니다.
-        HttpHeaders header = new HttpHeaders();
-
-        String restAppKey = "e95cf558fa89b9adf46a58d47cfc4df7";
-        String redirect_uri = "http://localhost:8080/oauthloginpage";
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", restAppKey);
-        params.add("redirect_uri", redirect_uri);
-        params.add("code", authorizationCode);
-        //params.put("client_secret", client_secret);
-
-        HttpEntity<MultiValueMap<String, String>> requestData = new HttpEntity<>(params, header);
-
-        // 4. 요청 URL을 정의해줍니다.
-        String url = "https://kauth.kakao.com/oauth/token";
-
-        // 5. exchange() 메소드로 api를 호출합니다.
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestData, String.class);
-
-        JSONObject accessTokenRes = jsonService.strToJson(response.getBody());
-
-        String accessToken = accessTokenRes.get("access_token").toString();
-        String refreshToken = accessTokenRes.get("refresh_token").toString();
-
-        //회원가입한적 있는지 확인해야함.
-        //이를 위해 회원 정보 조회
-        Map<String, String> userInfo = kakaoAPIService.getUserInfo(accessTokenRes.get("access_token").toString());
-
-        String nickname = userInfo.get("nickname");
-        String profileImage = userInfo.get("profile_image");
-        String kakaoId = userInfo.get("kakaoId");
+        //accessTokenRes로 이미 가입된 회원인지 확인
+        Kakaomember thisKakaoMember = kakaoAPIService.isKakaoMemberByAccessToken(accessTokenRes);
 
         String jwtFakeToken = null;
 
-        Kakaomember thisKakaoMember = kakaoAPIService.findKakaomemberByKakaoId(kakaoId);
         //새로운 회원이다.
         if(thisKakaoMember == null)
         {
             System.out.println("new user");
-            String newJwtFakeToken = kakaoAPIService.createJwtFake(kakaoId, nickname);
-            CreateKakaomemReq createKakaomemReq = CreateKakaomemReq.builder().accessToken(accessToken).refreshToken(refreshToken)
-                    .nickname(nickname).profileImage(profileImage).kakaoId(kakaoId).jwtFakeToken(newJwtFakeToken)
-                    .build();
-            kakaoAPIService.createKakaomember(createKakaomemReq);
+            String newJwtFakeToken = kakaoAPIService.createKakaomember(accessTokenRes);
 
             jwtFakeToken = newJwtFakeToken;
         }
         else{ // 있는 놈임.
-            System.out.println(" hello.");
+            System.out.println(" hello. prev user.");
             jwtFakeToken = thisKakaoMember.getJwtFakeToken();
         }
 
         //로그인 성공했으니 토큰을 생성해 주자.
         //jwt 토큰으로 해야겠지만. 임시용으로 가볍게 만들어서 하자.
-
 
         return ResponseEntity.ok(jwtFakeToken);
 

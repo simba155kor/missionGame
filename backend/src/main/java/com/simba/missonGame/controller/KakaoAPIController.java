@@ -20,6 +20,8 @@ public class KakaoAPIController {
     //jwtFakeToken 받아서 accessToken으로 바꾸고 이걸로 회원 정보 요청함.
     @GetMapping("/userinfo")
     ResponseEntity<Map<String, String>> getUserInfo(@RequestParam(value = "jwtFakeToken") String jwtFakeToken) throws ParseException {
+        kakaoAPIService.checkAccessTokenExpiredAndRenew(jwtFakeToken);
+
         String accessToken = kakaoAPIService.convertJwtFakeTokenToAccessToken(jwtFakeToken);
         Map<String, String> userInfo = kakaoAPIService.getUserInfo(accessToken);
         return ResponseEntity.ok(userInfo);

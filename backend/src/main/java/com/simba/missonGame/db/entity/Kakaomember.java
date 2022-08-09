@@ -46,4 +46,9 @@ public class Kakaomember {
         this.kakaoId = createKakaomemReq.getKakaoId();
     }
 
+    public void renewAccessToken(String accessToken, String refreshToken){
+        this.accessToken = accessToken;
+        if(refreshToken != null) this.refreshToken = refreshToken;
+    }
+
 }
