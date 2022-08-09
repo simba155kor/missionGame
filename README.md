@@ -55,5 +55,6 @@
 
 ? post는 params로 넘겨주고 RequestParam 으로 받으면 400에러남..? 인섬니아에서는 에러 안남.
 
+predict 테이블 회원 번호 외래키로 묶기. save 하면 
 
 
