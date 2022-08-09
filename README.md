@@ -28,9 +28,26 @@
       
    - jwtFake 토큰 jwt 토큰으로 바꿀 것
 
-   - access token이 만료되면 refresh token으로 다시 얻어야 하는데 이러한 로직 없음.
-   - https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#refresh-token 
+   - (완)access token이 만료되면 refresh token으로 다시 얻어야 하는데 이러한 로직 없음.
+   - (완)https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#refresh-token 
 
-   - 백엔드 서버가 내려가도 로컬 스토리지에 jwtFake 토큰이 남아있음.
-       -> 유효기간을 설정해야하나? 어떻게 
+   - 백엔드 서버가 내려가도 로컬 스토리지에 jwtFake 토큰이 남아있음. 카카오 로그아웃 해도 jwtFake 토큰 남아있음.
+       -> 유효기간을 설정해야하나? 카카오 로그아웃시에는 어떻게 알고 지우지??
 --------------------------------
+
+미션 테이블 만들기.
+
+  - 각 회원에게 할당된 미션 할당하기. 미션 번호 하기. 회원 테이블에 미션번호 컬럼 추가해야함.
+  - 나중에 조회할떄는 join 해서 미션 내용 뭔지 조회해야함.
+  - 새로고침 한번 할 수 있게.
+  
+  - 서로 예측할 수 있도록 input 만들어야함.
+  - 미션 받은 사람은 목록에 나와야함.
+  - 목록에 회원 닉네임, 이미지 뜨게 하면 될듯.
+  - 그 사람옆에 버튼 눌러서 모달 창으로 뭐일지 예측하는 거 입력 적을 수 있게하기.
+  - 그 예측은 DB에 어떻게 저장할지 고민해볼것.
+
+배포.
+
+
+
