@@ -32,8 +32,10 @@ export default {
     ...mapGetters(["getLoginState", "getUserId", "getUserImage"]),
   },
   created() {
-    if (localStorage.getItem("jwtFake") !== null) {
-      this.getKakaoUserInfo(localStorage.getItem("jwtFake"));
+    let jwtFakeTokenInLocalStorage = localStorage.getItem("jwtFake");
+    if (jwtFakeTokenInLocalStorage !== null) {
+      this.getKakaoUserInfo(jwtFakeTokenInLocalStorage);
+      this.createNewUserInBoard(jwtFakeTokenInLocalStorage);
     }
   },
   data() {
@@ -50,14 +52,37 @@ export default {
         .get(`/kakaoAPI/userinfo`, { params: params })
         .then(({ data }) => {
           console.log(data);
+          console.log(data.memberNo);
           this.SET_LOGIN_STATE({
             userId: data.nickname,
             userImage: data.profile_image,
+            memberNo: data.memberNo,
           });
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    createNewUserInBoard(jwtFakeToken) {
+      console.log(jwtFakeToken);
+      let params = { jwtFakeToken: jwtFakeToken };
+      http
+        .post(`/board/newboard`, params)
+        .then(({ data }) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // console.log(jwtFakeToken);
+      // http
+      //   .post(`/board`)
+      //   .then(({ data }) => {
+      //     console.log(data);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
     logout() {
       localStorage.removeItem("jwtFake");

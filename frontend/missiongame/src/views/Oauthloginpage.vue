@@ -21,8 +21,6 @@ export default {
   name: "Oauthloginpage",
   components: {},
   created() {
-    // console.log(window.location.href);
-    // console.log(window.location.search);
     let queryString = window.location.search;
     let code = queryString.replace("?code=", "");
     this.kakaoOauthLogin(code);
@@ -37,10 +35,6 @@ export default {
           console.log(data);
           console.log("!!");
           localStorage.setItem("jwtFake", data);
-          // this.SET_LOGIN_STATE({
-          //   userId: data.nickname,
-          //   userImage: data.profile_image,
-          // });
 
           alert("카카오 로그인 성공!");
           this.$router.push("/");
