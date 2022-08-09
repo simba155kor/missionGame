@@ -1,28 +1,16 @@
 package com.simba.missonGame.controller;
 
 import com.simba.missonGame.db.entity.Kakaomember;
-import com.simba.missonGame.dto.Kakaomember.CreateKakaomemReq;
 import com.simba.missonGame.exception.CustomException;
 import com.simba.missonGame.service.JsonService;
+import com.simba.missonGame.service.JsonServiceImpl;
 import com.simba.missonGame.service.KakaoAPIService;
+import com.simba.missonGame.service.KakaoAPIServiceImpl;
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,10 +18,10 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    KakaoAPIService kakaoAPIService;
+    KakaoAPIService kakaoAPIServiceImpl;
 
     @Autowired
-    JsonService jsonService;
+    JsonService jsonServiceImpl;
 
     //인가 코드를 받아서 access token을 요청함.
     //access token 요청하고 이를 이용해 회원 정보를 요청함.
@@ -43,10 +31,10 @@ public class AuthController {
         System.out.println("Auth code : " + authorizationCode);
 
         //인가 코드로 accessTokenRes 받기
-        JSONObject accessTokenRes = kakaoAPIService.convertAuthorizationCodeToAccessToken(authorizationCode);
+        JSONObject accessTokenRes = kakaoAPIServiceImpl.convertAuthorizationCodeToAccessToken(authorizationCode);
 
         //accessTokenRes로 이미 가입된 회원인지 확인
-        Kakaomember thisKakaoMember = kakaoAPIService.isKakaoMemberByAccessToken(accessTokenRes);
+        Kakaomember thisKakaoMember = kakaoAPIServiceImpl.isKakaoMemberByAccessToken(accessTokenRes);
 
         String jwtFakeToken = null;
 
@@ -54,7 +42,7 @@ public class AuthController {
         if(thisKakaoMember == null)
         {
             System.out.println("new user");
-            String newJwtFakeToken = kakaoAPIService.createKakaomember(accessTokenRes);
+            String newJwtFakeToken = kakaoAPIServiceImpl.createKakaomember(accessTokenRes);
 
             jwtFakeToken = newJwtFakeToken;
         }
