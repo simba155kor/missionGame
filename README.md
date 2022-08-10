@@ -66,6 +66,7 @@
   - GCP 이용. MobaXterm SSH 연결.
   - MYSQL 설치
   - Nginx 설치
+    -> https://krksap.tistory.com/1931 해줘야 oauth 잘됨.
   - API서버는 jar 파일로 빌드. 실행
   - 도메인 등록. 
   - 배포용으로 localhost 되있던 소스 코드 다 변경
