@@ -11,7 +11,7 @@
         <td>
           <span>{{ board.nickname }}</span>
         </td>
-        <td><img :src="board.profileImage" /></td>
+        <td><img :src="board.profileImage" height="150" width="150" /></td>
         <td>
           <span
             ><b> {{ board.missionName }} </b></span
@@ -20,26 +20,32 @@
           <span v-if="checkMe(board.memberNo)">{{
             yourMission.missionContent
           }}</span>
+          <span v-else-if="this.getTimeOut">
+            {{ allUserMissionList[board.memberNo].missionContent }}</span
+          >
           <span v-else> *****************</span>
         </td>
         <!-- <td><span v-html="item.subtitle"></span></td> -->
         <td>
-          <button class="btn btn-secondary" @click="showModal = true">
+          <button
+            class="btn btn-secondary"
+            @click="openModal(board.nickname, board.memberNo)"
+          >
             입력
           </button>
         </td>
-        <BoardModal
-          v-if="showModal"
-          @close="showModal = false"
-          :nickname="board.nickname"
-          :yourId="board.memberNo"
-        >
-        </BoardModal>
 
         <!-- <td><span v-html="item.director"></span></td>
         <td><span v-html="item.actor"></span></td>
         <td><span v-html="item.userRating"></span></td> -->
       </tr>
+      <BoardModal
+        v-if="showModal"
+        @close="showModal = false"
+        :nickname="propsNickname"
+        :yourId="propsMemberNo"
+      >
+      </BoardModal>
     </table>
     <div class="blank" style="margin-top: 200px"></div>
     <table v-if="this.getTimeOut" class="boardResult">
@@ -52,7 +58,7 @@
         <td>
           <span>{{ board.nickname }}</span>
         </td>
-        <td><img :src="board.profileImage" /></td>
+        <td><img :src="board.profileImage" height="150" width="150" /></td>
         <td>
           <!-- <span v-if="checkMe(board.memberNo)">{{ yourMission }}</span>
           <span v-else> *****************</span> -->
@@ -60,20 +66,15 @@
             <th>닉네임</th>
             <th>예측내용</th>
           </tr>
-          <tr v-for="(predictlist, index) in predictLists" :key="index">
+          <tr
+            v-for="(predictlist, index) in predictLists[board.memberNo]"
+            :key="index"
+          >
             <td>{{ predictlist.nickname }}</td>
             <td>{{ predictlist.predictContent }}</td>
           </tr>
         </td>
         <!-- <td><span v-html="item.subtitle"></span></td> -->
-
-        <BoardModal
-          v-if="showModal"
-          @close="showModal = false"
-          :nickname="board.nickname"
-          :yourId="board.memberNo"
-        >
-        </BoardModal>
 
         <!-- <td><span v-html="item.director"></span></td>
         <td><span v-html="item.actor"></span></td>
@@ -103,11 +104,12 @@ export default {
       .then(({ data }) => {
         // console.log(data);
         this.boardList = data;
-
         for (let a = 0; a < this.boardList.length; a++) {
           this.getManMissionTitle(this.boardList[a].memberNo, a);
         }
         this.getAllUserMissionPredict();
+        if (this.getTimeOut) this.getAllUserMission();
+        console.log(this.boardList);
       })
       .catch((err) => {
         console.log(err);
@@ -118,8 +120,11 @@ export default {
       boardList: null,
       showModal: false,
       yourMission: "",
-      predictLists: [],
+      predictLists: {},
       tempData: null,
+      propsNickname: null,
+      propsMemberNo: null,
+      allUserMissionList: {},
     };
   },
   computed: {
@@ -134,6 +139,22 @@ export default {
     checkMe(num) {
       if (this.getMyMemberNo == num) return true;
       else return false;
+    },
+    getAllUserMission() {
+      this.boardList.forEach((element) => {
+        this.getYourMissionAll(element.memberNo);
+      });
+    },
+    getYourMissionAll(userId) {
+      let query = { myId: userId };
+      http
+        .get(`/membermission/${query.myId}`, { query: query })
+        .then(({ data }) => {
+          this.allUserMissionList[userId] = data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getYourMission() {
       let query = { myId: this.getMyMemberNo };
@@ -161,6 +182,7 @@ export default {
       this.boardList.forEach((board) => {
         this.getHisMissionPredict(board.memberNo, board.nickname);
       });
+      console.log(this.predictLists);
     },
     getHisMissionPredict(myId, nickname) {
       let query = { myId: myId };
@@ -170,7 +192,9 @@ export default {
           data.forEach((element) => {
             let data = element;
             data["nickname"] = nickname;
-            this.predictLists.push(data);
+            if (!Array.isArray(this.predictLists[data.hisMemberNo]))
+              this.predictLists[data.hisMemberNo] = [];
+            this.predictLists[data.hisMemberNo].push(data);
           });
           // let predictUserInfo = {
           //   nickname: nickname,
@@ -180,6 +204,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    openModal(nickname, memberNo) {
+      this.showModal = true;
+      this.propsNickname = nickname;
+      this.propsMemberNo = memberNo;
     },
   },
 };

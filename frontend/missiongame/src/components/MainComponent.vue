@@ -10,6 +10,7 @@
     <p><b>각자 임무를 뽑으세요.</b></p>
     <p><b>각자의 임무를 맞추세요.</b></p>
     <p><b>자기의 임무를 들키지 마세요.</b></p>
+    <p><b>오후 10시에 미션이 공개됨.</b></p>
     <h3></h3>
     <button class="btn btn-primary" @click="goPick()">시작하기</button>
     <button v-if="getLoginState" class="btn btn-danger" @click="logout()">
@@ -40,7 +41,10 @@ export default {
     let now = new Date();
     let hours = now.getHours();
     if (hours >= 22) this.SET_TIMEOUT_STATE_TRUE();
-    if (hours < 1) this.SET_TIMEOUT_STATE_FALSE();
+    if (hours < 1) {
+      this.SET_TIMEOUT_STATE_FALSE();
+      localStorage.removeItem("jwtFake");
+    }
   },
   data() {
     return {};

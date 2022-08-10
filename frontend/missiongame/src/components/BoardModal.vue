@@ -37,6 +37,7 @@ export default {
   components: {},
   created() {
     this.getHisMission();
+    console.log(this.$props.yourId);
   },
   data() {
     return {
@@ -70,9 +71,6 @@ export default {
         });
     },
     getHisMission() {
-      if (this.getMyMemberNo === this.$props.yourId) {
-        alert("니껄 왜 예측해?");
-      }
       let query = { myId: this.getMyMemberNo, yourId: this.$props.yourId };
       http
         .get(`/predict/${query.myId}/${query.yourId}`, { query: query })
