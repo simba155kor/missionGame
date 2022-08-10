@@ -24,7 +24,7 @@ public class MembermissionServiceImpl implements MembermissionService{
     @Autowired
     KakaomemberRepository kakaomemberRepository;
 
-    public String getMyMission(Long myId){
+    public Mission getMyMission(Long myId){
 
         Optional<Kakaomember> kakaomember = kakaomemberRepository.findById(myId);
 
@@ -35,7 +35,7 @@ public class MembermissionServiceImpl implements MembermissionService{
 
         Mission mission = missionRepository.findByMissionNo(missionNo).get();
 
-        return mission.getMissionContent();
+        return mission;
     }
 
     public MemberMission createMyMission(CreateMemberMissionReq createMemberMissionReq){

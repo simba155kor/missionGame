@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface MembermissionService {
 
-    public String getMyMission(Long myId);
+    public Mission getMyMission(Long myId);
 
     public MemberMission createMyMission(CreateMemberMissionReq createMemberMissionReq);
 }

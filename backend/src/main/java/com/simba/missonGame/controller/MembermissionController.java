@@ -1,5 +1,6 @@
 package com.simba.missonGame.controller;
 
+import com.simba.missonGame.db.entity.Mission;
 import com.simba.missonGame.dto.membermission.CreateMemberMissionReq;
 import com.simba.missonGame.service.MembermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class MembermissionController {
     @GetMapping("/{myId}")
     ResponseEntity<?> getMyMission(@PathVariable(value = "myId") Long myId){
 
-        String missionContent = membermissionService.getMyMission(myId);
+        Mission missionContent = membermissionService.getMyMission(myId);
 
         return ResponseEntity.ok(missionContent);
     }
