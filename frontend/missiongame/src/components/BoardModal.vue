@@ -70,7 +70,6 @@ export default {
         });
     },
     getHisMission() {
-      console.log(this.getMyMemberNo);
       if (this.getMyMemberNo === this.$props.yourId) {
         alert("니껄 왜 예측해?");
       }
@@ -78,7 +77,7 @@ export default {
       http
         .get(`/predict/${query.myId}/${query.yourId}`, { query: query })
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           this.myPredict = data.predictContent;
         })
         .catch((err) => {

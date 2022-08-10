@@ -38,10 +38,8 @@ export default {
       http
         .get(`/membermission/${query.myId}`, { query: query })
         .then(({ data }) => {
-          console.log(data);
           if (data === "") {
             this.canChocie = true;
-            console.log(this.canChocie);
           }
         })
         .catch((err) => {
@@ -56,7 +54,6 @@ export default {
         http
           .get(`/mission/choiceone`, { params: params })
           .then(({ data }) => {
-            console.log(data);
             this.createMissionMember(data.missionNo);
           })
           .catch((err) => {
@@ -69,7 +66,6 @@ export default {
       http
         .post(`/membermission/createmission`, params)
         .then(({ data }) => {
-          console.log(data);
           let missionName = data.mission.missionName;
           let missionContent = data.mission.missionContent;
           alert("미션을 뽑았다! 너의 미션은 " + missionName);

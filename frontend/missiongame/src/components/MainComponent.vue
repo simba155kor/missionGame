@@ -37,12 +37,21 @@ export default {
       this.getKakaoUserInfo(jwtFakeTokenInLocalStorage);
       this.createNewUserInBoard(jwtFakeTokenInLocalStorage);
     }
+    let now = new Date();
+    let hours = now.getHours();
+    if (hours >= 22) this.SET_TIMEOUT_STATE_TRUE();
+    if (hours < 1) this.SET_TIMEOUT_STATE_FALSE();
   },
   data() {
     return {};
   },
   methods: {
-    ...mapMutations(["SET_LOGIN_STATE", "SET_LOGOUT_STATE"]),
+    ...mapMutations([
+      "SET_LOGIN_STATE",
+      "SET_LOGOUT_STATE",
+      "SET_TIMEOUT_STATE_TRUE",
+      "SET_TIMEOUT_STATE_FALSE",
+    ]),
     goPick() {
       this.$router.push("/choice");
     },
@@ -51,8 +60,7 @@ export default {
       http
         .get(`/kakaoAPI/userinfo`, { params: params })
         .then(({ data }) => {
-          console.log(data);
-          console.log(data.memberNo);
+          // console.log(data);
           this.SET_LOGIN_STATE({
             userId: data.nickname,
             userImage: data.profile_image,
@@ -64,7 +72,7 @@ export default {
         });
     },
     createNewUserInBoard(jwtFakeToken) {
-      console.log(jwtFakeToken);
+      // console.log(jwtFakeToken);
       let params = { jwtFakeToken: jwtFakeToken };
       http
         .post(`/board/newboard`, params)
@@ -74,15 +82,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      // console.log(jwtFakeToken);
-      // http
-      //   .post(`/board`)
-      //   .then(({ data }) => {
-      //     console.log(data);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
     },
     logout() {
       localStorage.removeItem("jwtFake");

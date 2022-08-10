@@ -32,8 +32,6 @@ export default {
       http
         .get(`/auth/code`, { params: params })
         .then(({ data }) => {
-          console.log(data);
-          console.log("!!");
           localStorage.setItem("jwtFake", data);
 
           alert("카카오 로그인 성공!");

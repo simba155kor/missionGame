@@ -6,6 +6,7 @@ export default createStore({
     userImage : "null",
     loginState: false,
     myMemberNo: "",
+    timeOutState : false,
   },
   mutations: {
     SET_LOGIN_STATE(state, data) {
@@ -20,8 +21,17 @@ export default createStore({
       state.userImage = "null";
       state.myMemberNo = "";
     },
+    SET_TIMEOUT_STATE_TRUE(state) {
+      state.timeOutState = true;
+    },
+    SET_TIMEOUT_STATE_FALSE(state) {
+      state.timeOutState = true;
+    },
   },
   getters: {
+    getTimeOut(state) {
+      return state.timeOutState;
+    },
     getUserId(state) {
       return state.userId;
     },
