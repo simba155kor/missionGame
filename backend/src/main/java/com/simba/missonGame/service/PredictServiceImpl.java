@@ -22,6 +22,10 @@ public class PredictServiceImpl implements PredictService{
     public Predict getPredict(Long myId, Long hisId){
        return predictRepository.findByMyMemberNoAndHisMemberNo(myId, hisId).orElse(null);
     }
+
+    public List<Predict> getPredict(Long myId){
+        return predictRepository.findByMyMemberNo(myId).orElse(null);
+    }
     public Predict setPredict(SetPredictReq setPredictReq){
        Predict predict = getPredict(setPredictReq.getMyMemberNo(), setPredictReq.getHisMemberNo());
         if(predict == null) return predictRepository.save(new Predict(setPredictReq));

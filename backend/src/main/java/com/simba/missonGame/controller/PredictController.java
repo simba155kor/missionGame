@@ -18,8 +18,6 @@ public class PredictController {
     @GetMapping("/{myId}/{yourId}")
     ResponseEntity<?> readMyPredictForYou(@PathVariable(value = "myId") Long myId, @PathVariable(value="yourId") Long yourId){
 
-        System.out.println(myId + yourId);
-
         return ResponseEntity.ok(predictService.getPredict(myId, yourId));
     }
 
@@ -28,4 +26,9 @@ public class PredictController {
         return ResponseEntity.ok(predictService.setPredict(setPredictReq));
     }
 
+    @GetMapping("/{myId}")
+    ResponseEntity<?> readMyPredictByThem(@PathVariable(value = "myId") Long myId){
+
+        return ResponseEntity.ok(predictService.getPredict(myId));
+    }
 }
